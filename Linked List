@@ -1,0 +1,179 @@
+#include <iostream>
+#include <conio.h>
+
+using namespace std;
+
+typedef char Item_type;
+typedef struct LinkList
+{
+    Item_type entry;
+    struct LinkList *next;
+}ListNode;
+
+typedef struct list
+{
+    ListNode *awal;
+    ListNode *akhir;
+
+}List;
+
+void Create(List *q)
+{
+    q->awal=q->akhir=NULL;
+}
+
+void Tambah_Belakang(List *q, Item_type item)
+{
+    ListNode *baru= new ListNode;
+    baru->entry=item;
+    if(q->awal==NULL)
+        q->awal=baru;
+    else
+        q->akhir->next=baru;
+    q->akhir=baru;
+    q->akhir->next=NULL;
+}
+
+void Baca_Maju(List *q)
+{
+    ListNode *bantu=new ListNode;
+    bantu=q->awal;
+
+    while (bantu!=NULL)
+    {
+        cout<<bantu->entry;
+        bantu=bantu->next;
+        cout<<"-->";
+    }
+    cout<<"NULL";
+    cout<<endl;
+}
+
+void Tambahan_Depan(List *q, Item_type item)
+{
+    ListNode *baru=new ListNode;
+    baru->entry=item;
+    if(q->awal==NULL)
+    {
+        q->akhir=baru;
+        baru->next=NULL;
+    }
+    else
+    {
+        baru->next=q->awal;
+        q->awal=baru;
+    }
+}
+
+void Tambah_Tengah(List *q, Item_type item, int Posisi)
+{
+    ListNode *baru=new ListNode;
+    ListNode *bantu=new ListNode;
+    baru->entry=item;
+    if(q->awal==NULL)
+    {
+        q->awal=baru;
+        q->akhir=baru;
+        q->akhir->next=NULL;
+    }
+    else
+    {
+        if(Posisi==0)
+        {
+            baru->next=q->awal;
+            q->awal=baru;
+        }
+        else
+        {
+            bantu=q->awal;
+            for(int i=1; i<Posisi; i++)
+
+                if (bantu->next!=NULL)
+                bantu=bantu->next;
+                baru->next=bantu->next;
+                bantu->next=baru;
+            }
+
+        }
+    }
+
+bool Cari_Data (Item_type cari, List *q)
+{
+    ListNode *bantu=new ListNode;
+    bantu=q->awal;
+    while (bantu!=NULL)
+    {
+        if (bantu-> entry==cari)
+            return 0;
+        else
+        {
+            bantu=bantu->next;
+            if (bantu==NULL)
+                return 1;
+        }
+    }
+}
+
+void Hapus_Simpul(List *q, Item_type hapusan)
+{
+    ListNode *bantu=new ListNode;
+    ListNode *hapus=new ListNode;
+    if(q->awal==NULL)
+        cout<<"List masih kosong"<<endl;
+    else
+        if (q->awal->entry==hapusan)
+        {
+            hapus=q->awal;
+            q->awal=hapus->next;
+            delete(hapus);
+            cout<<"Ditemukan diawal list"<<endl;
+        }
+        else
+        {
+            bantu=q->awal;
+            while ((bantu!=q->akhir)&&(bantu->next->entry!=hapusan))
+                bantu=bantu->next;
+                hapus=bantu->next;
+                if (hapus==NULL)
+                    cout<<"Yes";
+                else
+                    cout<<"No.";
+
+                if(hapus!=NULL)
+                {
+                    if (hapus!=q->akhir)
+                        bantu->next=hapus->next;
+                    else
+                    {
+                        q->akhir=bantu;
+                        q->akhir->next=NULL;
+                    }
+                    delete (hapus);
+                }
+                else
+                    cout<<"Simpl tidak ditemukan"<<endl;
+        }
+}
+
+main()
+{
+    List *SingleList=new List;
+    char pilih, hasil, data, cari;
+    int tempat;
+    bool ada;
+    Create(SingleList);
+
+    //Tambah_Belakang (SingleList, 'S');
+    Baca_Maju(SingleList);
+    Tambah_Belakang(SingleList, 'A');
+    Baca_Maju(SingleList);
+    Tambahan_Depan(SingleList, 'I');
+    Baca_Maju(SingleList);
+    Tambah_Tengah(SingleList, 'P', 2);
+    Baca_Maju(SingleList);
+    cout<<endl<<endl;
+    Hapus_Simpul(SingleList, 'I');
+    Baca_Maju(SingleList);
+    delete (SingleList);
+    getch();
+}
